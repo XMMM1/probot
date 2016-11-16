@@ -1,18 +1,33 @@
 import os
 import time
 import requests
+import json
 from slackclient import SlackClient
 
 os.environ["SLACK_BOT_TOKEN"] = "{PLACEHOLDER}"
 os.environ["SLACK_BOT_ID"] = "{PLACEHOLDER}"
 # starterbot's ID as an environment variable
 # BOT_ID = os.enviroxn.get("SLACK_BOT_ID")
-SLACK_BOT_TOKEN = "{{PLACEHOLDER}}"
-BOT_ID = "{{PLACEHOLDER}}"
+SLACK_BOT_TOKEN = "{placeholder}}"
+BOT_ID = "{placeholder}}"
+data = {'token': SLACK_BOT_TOKEN}
+# r = requests.post('https://slack.com/api/users.list', data)
+# users = r.json()
+# with open('users.txt', 'w') as outfile:
+#     json.dump(users, outfile)
+# r = requests.post('https://slack.com/api/im.list', data)
+# im = r.json()
+# with open('im.txt', 'w') as outfile:
+#     json.dump(im, outfile)
 
+# data = {'token': SLACK_BOT_TOKEN, 'channel': '{{placeholder}}', 'as_user': 1,
+#         'text': 'Just talk to me!'}
+# r = requests.post('https://slack.com/api/chat.postMessage', data)
+# print(r)
 # constants
 AT_BOT = "<@" + BOT_ID + ">"
 EXAMPLE_COMMAND = 'do'
+
 
 def getRandomJoke():
     r = requests.get('http://api.icndb.com/jokes/random')
@@ -22,10 +37,12 @@ def getRandomJoke():
             return r['value']['joke']
     return None
 
+
 # instantiate Slack & Twilio clients
 # BOT_TOKEN = os.environ.get('SLACK_BOT_TOKEN')
 BOT_TOKEN = SLACK_BOT_TOKEN
 slack_client = SlackClient(BOT_TOKEN)
+
 
 def handle_command(command, channel):
     """
@@ -34,7 +51,7 @@ def handle_command(command, channel):
         returns back what it needs for clarification.
     """
     response = "Not sure what you mean. Use the *" + EXAMPLE_COMMAND + \
-               "* command with numbers, delimited by spaces."
+               "* command with numbers, delimited by spaces (i will write you a Jira task for you for coding more code and more) or ask me for a *joke* (this is my specialty)."
     if command.startswith(EXAMPLE_COMMAND):
         response = "Sure...write some more code then I can do that!"
     if "joke" in command:
@@ -76,6 +93,3 @@ if __name__ == "__main__":
             time.sleep(READ_WEBSOCKET_DELAY)
     else:
         print("Connection failed. Invalid Slack token or bot ID?")
-
-
-
